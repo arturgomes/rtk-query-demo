@@ -6,6 +6,9 @@ export interface Post {
 	body: string;
 	userId: string;
 	createdAt: string;
+	upvotes?: number;
+	downvotes?: number;
+	voteScore?: number;
 }
 
 const originalPosts: Post[] = [
@@ -86,5 +89,56 @@ export const posts: Post[] = [...originalPosts];
 export const resetPosts = (): Post[] => {
 	posts.length = 0;
 	posts.push(...originalPosts);
+	posts.forEach(post => {
+		post.upvotes = 0;
+		post.downvotes = 0;
+		post.voteScore = 0;
+	});
 	return posts;
 };
+
+export const upvotePost = (postId: string): { upvotes: number; downvotes: number; voteScore: number } | null => {
+	const post = posts.find(p => p.id === postId);
+	if (!post) {
+		return null;
+	}
+
+	post.upvotes = (post.upvotes || 0) + 1;
+	post.voteScore = (post.upvotes || 0) - (post.downvotes || 0);
+	return { upvotes: post.upvotes, downvotes: post.downvotes || 0, voteScore: post.voteScore };
+};
+
+export const downvotePost = (postId: string): { upvotes: number; downvotes: number; voteScore: number } | null => {
+	const post = posts.find(p => p.id === postId);
+	if (!post) {
+		return null;
+	}
+
+	const currentScore = (post.upvotes || 0) - (post.downvotes || 0);
+	if (currentScore <= 0) {
+		return null;
+	}
+
+	post.downvotes = (post.downvotes || 0) + 1;
+	post.voteScore = (post.upvotes || 0) - (post.downvotes || 0);
+	return { upvotes: post.upvotes || 0, downvotes: post.downvotes, voteScore: post.voteScore };
+};
+
+export const getVoteData = (postId: string): { upvotes: number; downvotes: number; voteScore: number } | null => {
+	const post = posts.find(p => p.id === postId);
+	if (!post) {
+		return null;
+	}
+
+	return {
+		upvotes: post.upvotes || 0,
+		downvotes: post.downvotes || 0,
+		voteScore: post.voteScore || 0
+	};
+};
+
+posts.forEach(post => {
+	post.upvotes = 0;
+	post.downvotes = 0;
+	post.voteScore = 0;
+});

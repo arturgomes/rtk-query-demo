@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { ObjectId } from "bson";
-import { type Post, posts, resetPosts } from "../posts";
+import { type Post, posts, resetPosts, upvotePost, downvotePost, getVoteData } from "../posts";
 
 const router = Router();
 
@@ -74,6 +74,49 @@ router.delete("/:id", (req, res) => {
 router.post("/reset", (_req, res) => {
 	const resetData = resetPosts();
 	res.json({ message: "Posts reset to original state", posts: resetData });
+});
+
+router.post("/:id/upvote", (req, res) => {
+	const postId = req.params.id;
+
+	const voteData = upvotePost(postId);
+	if (voteData === null) {
+		return res.status(404).json({ error: "Post not found" });
+	}
+
+	res.json(voteData);
+});
+
+router.post("/:id/downvote", (req, res) => {
+	const postId = req.params.id;
+
+	const post = posts.find(p => p.id === postId);
+	if (!post) {
+		return res.status(404).json({ error: "Post not found" });
+	}
+
+	const currentScore = (post.upvotes || 0) - (post.downvotes || 0);
+	if (currentScore <= 0) {
+		return res.status(400).json({ error: "Cannot downvote when score is zero or below" });
+	}
+
+	const voteData = downvotePost(postId);
+	if (voteData === null) {
+		return res.status(500).json({ error: "Failed to downvote post" });
+	}
+
+	res.json(voteData);
+});
+
+router.get("/:id/votes", (req, res) => {
+	const postId = req.params.id;
+
+	const voteData = getVoteData(postId);
+	if (voteData === null) {
+		return res.status(404).json({ error: "Post not found" });
+	}
+
+	res.json(voteData);
 });
 
 export default router;
