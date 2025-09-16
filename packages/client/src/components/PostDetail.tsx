@@ -153,11 +153,16 @@ const PostDetail = ({ postId, onBack }: PostDetailProps) => {
 					<h2 className="text-2xl font-bold text-gray-800 mb-4">
 						{post.title}
 					</h2>
-					{user && (
-						<div className="mb-4 text-sm text-gray-600">
-							By: <span className="font-medium text-gray-800">{user.name}</span>
+					<div className="mb-4 text-sm text-gray-600 space-y-1">
+						{user && (
+							<div>
+								By: <span className="font-medium text-gray-800">{user.name}</span>
+							</div>
+						)}
+						<div>
+							Created: <span className="font-medium text-gray-800">{new Date(post.createdAt).toLocaleDateString()}</span>
 						</div>
-					)}
+					</div>
 					<p className="text-gray-700 mb-6 whitespace-pre-line">{post.body}</p>
 					<div className="flex space-x-3">
 						<button

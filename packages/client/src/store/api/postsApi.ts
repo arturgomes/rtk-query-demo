@@ -6,6 +6,7 @@ export interface Post {
 	title: string;
 	body: string;
 	userId: string;
+	createdAt: string;
 }
 
 export interface User {
