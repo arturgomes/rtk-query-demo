@@ -7,6 +7,9 @@ export interface Post {
 	body: string;
 	userId: string;
 	createdAt: string;
+	upvotes?: number;
+	downvotes?: number;
+	voteScore?: number;
 }
 
 export interface User {
@@ -26,6 +29,12 @@ export interface UpdatePostRequest {
 	id: string;
 	title?: string;
 	body?: string;
+}
+
+export interface VoteResponse {
+	upvotes: number;
+	downvotes: number;
+	voteScore: number;
 }
 
 export const postsApi = createApi({
@@ -106,6 +115,32 @@ export const postsApi = createApi({
 						]
 					: [{ type: "Post", id: `USER_${userId}` }],
 		}),
+		upvotePost: builder.mutation<VoteResponse, string>({
+			query: (postId) => ({
+				url: `/posts/${postId}/upvote`,
+				method: "POST",
+			}),
+			invalidatesTags: (_, __, postId) => [
+				{ type: "Post", id: postId },
+				{ type: "Post", id: "LIST" },
+			],
+		}),
+		downvotePost: builder.mutation<VoteResponse, string>({
+			query: (postId) => ({
+				url: `/posts/${postId}/downvote`,
+				method: "POST",
+			}),
+			invalidatesTags: (_, __, postId) => [
+				{ type: "Post", id: postId },
+				{ type: "Post", id: "LIST" },
+			],
+		}),
+		getPostVotes: builder.query<VoteResponse, string>({
+			query: (postId) => ({
+				url: `/posts/${postId}/votes`,
+			}),
+			providesTags: (_, __, postId) => [{ type: "Post", id: postId }],
+		}),
 	}),
 });
 
@@ -119,4 +154,7 @@ export const {
 	useGetUsersQuery,
 	useGetUserByIdQuery,
 	useGetPostsByUserIdQuery,
+	useUpvotePostMutation,
+	useDownvotePostMutation,
+	useGetPostVotesQuery,
 } = postsApi;
