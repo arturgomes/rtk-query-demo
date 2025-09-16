@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useDeletePostMutation, useGetPostsQuery, useGetUsersQuery, useResetPostsMutation } from "../store/api/postsApi";
+import { useGetPostsQuery, useGetUsersQuery, useResetPostsMutation } from "../store/api/postsApi";
 import ErrorMessage from "./ErrorMessage";
 import LoadingSpinner from "./LoadingSpinner";
 import PostsListHeader from "./PostsListHeader";
@@ -13,8 +13,13 @@ const PostsList = ({ onNewPost }: PostsListProps) => {
 	const navigate = useNavigate();
 	const { data: posts, isLoading, isError } = useGetPostsQuery();
 	const { data: users } = useGetUsersQuery();
-	const [deletePost] = useDeletePostMutation();
 	const [resetPosts, { isLoading: isResetting }] = useResetPostsMutation();
+
+	const sortedPosts = posts ? [...posts].sort((a, b) => {
+		const aScore = a.voteScore || 0;
+		const bScore = b.voteScore || 0;
+		return bScore - aScore;
+	}) : [];
 
 	function getUserName(userId: string) {
 		const user = users?.find(u => u.id === userId);
@@ -38,13 +43,12 @@ const PostsList = ({ onNewPost }: PostsListProps) => {
 			/>
 
 			<ul className="divide-y divide-gray-200">
-				{posts?.map((post) => (
+				{sortedPosts.map((post) => (
 					<PostsListItem
 						key={post.id}
 						post={post}
 						getUserName={getUserName}
 						onSelectPost={(postId) => navigate(`/posts/${postId}`)}
-						onDeletePost={(postId) => deletePost(postId)}
 					/>
 				))}
 			</ul>

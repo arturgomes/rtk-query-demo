@@ -1,20 +1,53 @@
 import type { Post } from "../store/api/postsApi";
 import { PostItemButton, IconButton } from "./ui";
-import { TrashIcon } from "./ui/icons";
+import { UpvoteIcon, DownvoteIcon } from "./ui/icons";
+import { useUpvotePostMutation, useDownvotePostMutation, useGetPostVotesQuery } from "../store/api/postsApi";
 
 interface PostsListItemProps {
 	post: Post;
 	getUserName: (userId: string) => string;
 	onSelectPost: (postId: string) => void;
-	onDeletePost: (postId: string) => void;
 }
 
 const PostsListItem = ({
 	post,
 	getUserName,
 	onSelectPost,
-	onDeletePost,
 }: PostsListItemProps) => {
+	const { data: votesData } = useGetPostVotesQuery(post.id);
+
+	const [upvotePost, { isLoading: isUpvoting }] = useUpvotePostMutation();
+	const [downvotePost, { isLoading: isDownvoting }] = useDownvotePostMutation();
+
+	const upvotes = post.upvotes ?? votesData?.upvotes ?? 0;
+	const downvotes = post.downvotes ?? votesData?.downvotes ?? 0;
+	const voteScore = post.voteScore ?? votesData?.voteScore ?? 0;
+	const isLoading = isUpvoting || isDownvoting;
+
+	const handleUpvoteClick = async (e: React.MouseEvent) => {
+		e.stopPropagation();
+
+		if (isLoading) return;
+
+		try {
+			await upvotePost(post.id);
+		} catch (error) {
+			console.error("Error upvoting post:", error);
+		}
+	};
+
+	const handleDownvoteClick = async (e: React.MouseEvent) => {
+		e.stopPropagation();
+
+		if (isLoading) return;
+
+		try {
+			await downvotePost(post.id);
+		} catch (error) {
+			console.error("Error downvoting post:", error);
+		}
+	};
+
 	return (
 		<li className="py-4">
 			<div className="flex justify-between group">
@@ -32,15 +65,25 @@ const PostsListItem = ({
 						<p className="text-gray-600">{post.body.substring(0, 100)}...</p>
 					</div>
 				</PostItemButton>
-				<IconButton
-					className="ml-4 text-red-500 hover:text-red-700 self-start"
-					icon={<TrashIcon className="w-5 h-5" />}
-					aria-label="Delete post"
-					onClick={(e) => {
-						e.stopPropagation();
-						onDeletePost(post.id);
-					}}
-				/>
+				<div className="ml-4 self-start flex flex-col items-center gap-1">
+					<IconButton
+						className={`transition-colors text-green-500 hover:text-green-600 ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+						icon={<UpvoteIcon className="w-5 h-5" />}
+						aria-label="Upvote post"
+						onClick={handleUpvoteClick}
+						disabled={isLoading}
+					/>
+					<span className="text-sm text-gray-600 font-medium min-w-[2rem] text-center">
+						{voteScore}
+					</span>
+					<IconButton
+						className={`transition-colors text-red-500 hover:text-red-600 ${isLoading || voteScore <= 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+						icon={<DownvoteIcon className="w-5 h-5" />}
+						aria-label="Downvote post"
+						onClick={handleDownvoteClick}
+						disabled={isLoading || voteScore <= 0}
+					/>
+				</div>
 			</div>
 		</li>
 	);
