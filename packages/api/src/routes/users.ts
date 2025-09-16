@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { users } from "../users";
+import { users, addUser } from "../users";
 import { posts } from "../posts";
 
 const router = Router();
@@ -29,6 +29,17 @@ router.get("/:id/posts", (req, res) => {
 
 	const userPosts = posts.filter((p) => p.userId === userId);
 	res.json(userPosts);
+});
+
+router.post("/", (req, res) => {
+	const { name, email, username } = req.body;
+
+	if (!name || !email || !username) {
+		return res.status(400).json({ error: "Name, email, and username are required" });
+	}
+
+	const newUser = addUser({ name, email, username });
+	res.status(201).json(newUser);
 });
 
 export default router;
