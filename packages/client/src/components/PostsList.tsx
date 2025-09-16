@@ -1,5 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useGetPostsQuery, useGetUsersQuery, useResetPostsMutation } from "../store/api/postsApi";
+import {
+	useGetPostsQuery,
+	useGetUsersQuery,
+	useResetPostsMutation,
+} from "../store/api/postsApi";
 import ErrorMessage from "./ErrorMessage";
 import LoadingSpinner from "./LoadingSpinner";
 import PostsListHeader from "./PostsListHeader";
@@ -15,15 +19,17 @@ const PostsList = ({ onNewPost }: PostsListProps) => {
 	const { data: users } = useGetUsersQuery();
 	const [resetPosts, { isLoading: isResetting }] = useResetPostsMutation();
 
-	const sortedPosts = posts ? [...posts].sort((a, b) => {
-		const aScore = a.voteScore || 0;
-		const bScore = b.voteScore || 0;
-		return bScore - aScore;
-	}) : [];
+	const sortedPosts = posts
+		? [...posts].sort((a, b) => {
+				const aScore = a.voteScore || 0;
+				const bScore = b.voteScore || 0;
+				return bScore - aScore;
+			})
+		: [];
 
 	function getUserName(userId: string) {
-		const user = users?.find(u => u.id === userId);
-		return user?.name || 'Unknown User';
+		const user = users?.find((u) => u.id === userId);
+		return user?.name || "Unknown User";
 	}
 
 	if (isLoading) {
@@ -35,14 +41,14 @@ const PostsList = ({ onNewPost }: PostsListProps) => {
 	}
 
 	return (
-		<div>
+		<div className="h-full flex flex-col">
 			<PostsListHeader
 				onNewPost={onNewPost}
 				onReset={() => resetPosts()}
 				isResetting={isResetting}
 			/>
 
-			<ul className="divide-y divide-gray-200">
+			<ul className="divide-y divide-gray-200 overflow-y-auto flex-1">
 				{sortedPosts.map((post) => (
 					<PostsListItem
 						key={post.id}

@@ -4,7 +4,14 @@ import {
 	useGetPostVotesQuery,
 	useUpvotePostMutation,
 } from "../store/api/postsApi";
-import { IconButton, PostItemButton } from "./ui";
+import {
+	Button,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "./ui";
 import { DownvoteIcon, UpvoteIcon } from "./ui/icons";
 
 interface PostsListItemProps {
@@ -23,8 +30,6 @@ const PostsListItem = ({
 	const [upvotePost, { isLoading: isUpvoting }] = useUpvotePostMutation();
 	const [downvotePost, { isLoading: isDownvoting }] = useDownvotePostMutation();
 
-	const _upvotess = post.upvotes ?? votesData?.upvotes ?? 0;
-	const _downvotess = post.downvotes ?? votesData?.downvotes ?? 0;
 	const voteScore = post.voteScore ?? votesData?.voteScore ?? 0;
 	const isLoading = isUpvoting || isDownvoting;
 
@@ -53,43 +58,64 @@ const PostsListItem = ({
 	};
 
 	return (
-		<li className="py-4">
-			<div className="flex justify-between group">
-				<PostItemButton onClick={() => onSelectPost(post.id)}>
-					<div>
-						<h3 className="text-lg font-medium text-gray-800 mb-2">
+		<Card className="group transition-all hover:shadow-lg mb-4 overflow-hidden">
+			<div className="flex min-h-[120px]">
+				{/* Main content area - clickable */}
+				<button
+					type="button"
+					className="flex-1 text-left hover:bg-gray-50 transition-colors focus:bg-gray-50 focus:outline-none"
+					onClick={() => onSelectPost(post.id)}
+				>
+					<CardHeader className="pb-3">
+						<CardTitle className="mb-2 group-hover:text-blue-600 transition-colors">
 							{post.title}
-						</h3>
-						<div className="text-sm text-gray-500 mb-2 space-y-1">
-							<div>By: {getUserName(post.userId)}</div>
-							<div>
-								Created: {new Date(post.createdAt).toLocaleDateString()}
-							</div>
+						</CardTitle>
+						<div className="flex items-center gap-4 text-sm text-gray-500">
+							<span>By: {getUserName(post.userId)}</span>
+							<span>{new Date(post.createdAt).toLocaleDateString()}</span>
 						</div>
-						<p className="text-gray-600">{post.body.substring(0, 100)}...</p>
-					</div>
-				</PostItemButton>
-				<div className="ml-4 self-start flex flex-col items-center gap-1">
-					<IconButton
-						className={`transition-colors text-green-500 hover:text-green-600 ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-						icon={<UpvoteIcon className="w-5 h-5" />}
-						aria-label="Upvote post"
+					</CardHeader>
+					<CardContent>
+						<CardDescription className="leading-relaxed">
+							{post.body.length > 150
+								? `${post.body.substring(0, 150)}...`
+								: post.body}
+						</CardDescription>
+					</CardContent>
+				</button>
+
+				{/* Voting controls */}
+				<div className="flex flex-col items-center justify-center gap-3 p-4 bg-gray-50 border-l border-gray-200 min-w-[80px]">
+					<Button
+						variant="ghost"
+						size="sm"
+						className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-100 disabled:opacity-50 rounded-full"
 						onClick={handleUpvoteClick}
 						disabled={isLoading}
-					/>
-					<span className="text-sm text-gray-600 font-medium min-w-[2rem] text-center">
+						aria-label="Upvote post"
+						isLoading={isUpvoting}
+					>
+						<UpvoteIcon className="w-5 h-5" />
+					</Button>
+
+					<span className="text-sm font-semibold text-gray-800 min-w-[2rem] text-center bg-white px-2 py-1 rounded-md shadow-sm border">
 						{voteScore}
 					</span>
-					<IconButton
-						className={`transition-colors text-red-500 hover:text-red-600 ${isLoading || voteScore <= 0 ? "opacity-50 cursor-not-allowed" : ""}`}
-						icon={<DownvoteIcon className="w-5 h-5" />}
-						aria-label="Downvote post"
+
+					<Button
+						variant="ghost"
+						size="sm"
+						className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-100 disabled:opacity-50 rounded-full"
 						onClick={handleDownvoteClick}
 						disabled={isLoading || voteScore <= 0}
-					/>
+						aria-label="Downvote post"
+						isLoading={isDownvoting}
+					>
+						<DownvoteIcon className="w-5 h-5" />
+					</Button>
 				</div>
 			</div>
-		</li>
+		</Card>
 	);
 };
 
