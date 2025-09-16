@@ -1,5 +1,5 @@
 // src/components/PostsList.tsx
-import { useDeletePostMutation, useGetPostsQuery, useResetPostsMutation } from "../store/api/postsApi";
+import { useDeletePostMutation, useGetPostsQuery, useGetUsersQuery, useResetPostsMutation } from "../store/api/postsApi";
 
 interface PostsListProps {
 	onSelectPost: (postId: number) => void;
@@ -7,9 +7,15 @@ interface PostsListProps {
 }
 
 const PostsList = ({ onSelectPost, onNewPost }: PostsListProps) => {
-	const { data: posts, isLoading, isError, error } = useGetPostsQuery();
+	const { data: posts, isLoading, isError } = useGetPostsQuery();
+	const { data: users } = useGetUsersQuery();
 	const [deletePost] = useDeletePostMutation();
 	const [resetPosts, { isLoading: isResetting }] = useResetPostsMutation();
+
+	function getUserName(userId: string) {
+		const user = users?.find(u => u.id === userId);
+		return user?.name || 'Unknown User';
+	}
 
 	if (isLoading) {
 		return (
@@ -22,7 +28,7 @@ const PostsList = ({ onSelectPost, onNewPost }: PostsListProps) => {
 	if (isError) {
 		return (
 			<div className="bg-red-100 text-red-700 p-4 rounded-lg">
-				Error: {(error as any).message}
+				Error loading posts
 			</div>
 		);
 	}
@@ -92,6 +98,10 @@ const PostsList = ({ onSelectPost, onNewPost }: PostsListProps) => {
 								<h3 className="text-lg font-medium text-gray-800 mb-2">
 									{post.title}
 								</h3>
+								<div className="text-sm text-gray-500 mb-2 space-y-1">
+									<div>By: {getUserName(post.userId)}</div>
+									<div>Created: {new Date(post.createdAt).toLocaleDateString()}</div>
+								</div>
 								<p className="text-gray-600">
 									{post.body.substring(0, 100)}...
 								</p>

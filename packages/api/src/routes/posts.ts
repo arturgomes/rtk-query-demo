@@ -33,6 +33,7 @@ router.post("/", (req, res) => {
 		title,
 		body,
 		userId,
+		createdAt: new Date().toISOString(),
 	};
 
 	posts.push(newPost);
