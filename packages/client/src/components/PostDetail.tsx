@@ -3,6 +3,7 @@ import { useState } from "react";
 import {
 	useDeletePostMutation,
 	useGetPostByIdQuery,
+	useGetUserByIdQuery,
 	useUpdatePostMutation,
 } from "../store/api/postsApi";
 
@@ -13,6 +14,9 @@ interface PostDetailProps {
 
 const PostDetail = ({ postId, onBack }: PostDetailProps) => {
 	const { data: post, isLoading, isError } = useGetPostByIdQuery(postId);
+	const { data: user, isLoading: isUserLoading } = useGetUserByIdQuery(post?.userId || "", {
+		skip: !post?.userId,
+	});
 	const [updatePost, { isLoading: isUpdating }] = useUpdatePostMutation();
 	const [deletePost, { isLoading: isDeleting }] = useDeletePostMutation();
 
@@ -44,7 +48,7 @@ const PostDetail = ({ postId, onBack }: PostDetailProps) => {
 		}
 	};
 
-	if (isLoading)
+	if (isLoading || isUserLoading)
 		return (
 			<div className="flex justify-center py-8">
 				<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -149,6 +153,11 @@ const PostDetail = ({ postId, onBack }: PostDetailProps) => {
 					<h2 className="text-2xl font-bold text-gray-800 mb-4">
 						{post.title}
 					</h2>
+					{user && (
+						<div className="mb-4 text-sm text-gray-600">
+							By: <span className="font-medium text-gray-800">{user.name}</span>
+						</div>
+					)}
 					<p className="text-gray-700 mb-6 whitespace-pre-line">{post.body}</p>
 					<div className="flex space-x-3">
 						<button

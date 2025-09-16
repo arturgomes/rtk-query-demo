@@ -2,14 +2,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface Post {
-	id: number;
+	id: string;
 	title: string;
 	body: string;
-	userId: number;
+	userId: string;
 }
 
 export interface User {
-	id: number;
+	id: string;
 	name: string;
 	email: string;
 	username: string;
@@ -18,11 +18,11 @@ export interface User {
 export interface CreatePostRequest {
 	title: string;
 	body: string;
-	userId: number;
+	userId: string;
 }
 
 export interface UpdatePostRequest {
-	id: number;
+	id: string;
 	title?: string;
 	body?: string;
 }
@@ -44,7 +44,7 @@ export const postsApi = createApi({
 						]
 					: [{ type: "Post", id: "LIST" }],
 		}),
-		getPostById: builder.query<Post, number>({
+		getPostById: builder.query<Post, string>({
 			query: (id) => `/posts/${id}`,
 			providesTags: (_, __, id) => [{ type: "Post", id }],
 		}),
@@ -64,7 +64,7 @@ export const postsApi = createApi({
 			}),
 			invalidatesTags: (_, __, { id }) => [{ type: "Post", id }],
 		}),
-		deletePost: builder.mutation<void, number>({
+		deletePost: builder.mutation<void, string>({
 			query: (id) => ({
 				url: `/posts/${id}`,
 				method: "DELETE",
@@ -91,11 +91,11 @@ export const postsApi = createApi({
 						]
 					: [{ type: "User", id: "LIST" }],
 		}),
-		getUserById: builder.query<User, number>({
+		getUserById: builder.query<User, string>({
 			query: (id) => `/users/${id}`,
 			providesTags: (_, __, id) => [{ type: "User", id }],
 		}),
-		getPostsByUserId: builder.query<Post[], number>({
+		getPostsByUserId: builder.query<Post[], string>({
 			query: (userId) => `/users/${userId}/posts`,
 			providesTags: (result, _, userId) =>
 				result
