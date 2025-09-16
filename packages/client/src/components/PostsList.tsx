@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useDeletePostMutation, useGetPostsQuery, useGetUsersQuery, useResetPostsMutation } from "../store/api/postsApi";
 import ErrorMessage from "./ErrorMessage";
 import LoadingSpinner from "./LoadingSpinner";
@@ -5,11 +6,11 @@ import PostsListHeader from "./PostsListHeader";
 import PostsListItem from "./PostsListItem";
 
 interface PostsListProps {
-	onSelectPost: (postId: number) => void;
 	onNewPost: () => void;
 }
 
-const PostsList = ({ onSelectPost, onNewPost }: PostsListProps) => {
+const PostsList = ({ onNewPost }: PostsListProps) => {
+	const navigate = useNavigate();
 	const { data: posts, isLoading, isError } = useGetPostsQuery();
 	const { data: users } = useGetUsersQuery();
 	const [deletePost] = useDeletePostMutation();
@@ -42,7 +43,7 @@ const PostsList = ({ onSelectPost, onNewPost }: PostsListProps) => {
 						key={post.id}
 						post={post}
 						getUserName={getUserName}
-						onSelectPost={onSelectPost}
+						onSelectPost={(postId) => navigate(`/posts/${postId}`)}
 						onDeletePost={(postId) => deletePost(postId)}
 					/>
 				))}

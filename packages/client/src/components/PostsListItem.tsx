@@ -5,7 +5,7 @@ import { TrashIcon } from "./ui/icons";
 interface PostsListItemProps {
 	post: Post;
 	getUserName: (userId: string) => string;
-	onSelectPost: (postId: number) => void;
+	onSelectPost: (postId: string) => void;
 	onDeletePost: (postId: string) => void;
 }
 
@@ -19,7 +19,7 @@ const PostsListItem = ({
 		<li className="py-4">
 			<div className="flex justify-between group">
 				<PostItemButton
-					onClick={() => onSelectPost(Number(post.id))}
+					onClick={() => onSelectPost(post.id)}
 				>
 					<div>
 						<h3 className="text-lg font-medium text-gray-800 mb-2">

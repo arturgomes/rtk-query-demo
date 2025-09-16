@@ -15,12 +15,12 @@ import {
 } from "./ui";
 
 interface PostDetailProps {
-	postId: number;
+	postId: string;
 	onBack: () => void;
 }
 
 const PostDetail = ({ postId, onBack }: PostDetailProps) => {
-	const { data: post, isLoading, isError } = useGetPostByIdQuery(postId.toString());
+	const { data: post, isLoading, isError } = useGetPostByIdQuery(postId);
 	const { data: user, isLoading: isUserLoading } = useGetUserByIdQuery(
 		post?.userId || "",
 		{
@@ -31,14 +31,8 @@ const PostDetail = ({ postId, onBack }: PostDetailProps) => {
 	const [deletePost, { isLoading: isDeleting }] = useDeletePostMutation();
 
 	const [isEditing, setIsEditing] = useState(false);
-	const [title, setTitle] = useState("");
-	const [body, setBody] = useState("");
-
-	// Initialize edit form when post data is loaded
-	if (post && title === "" && body === "") {
-		setTitle(post.title);
-		setBody(post.body);
-	}
+	const [title, setTitle] = useState(post?.title || "");
+	const [body, setBody] = useState(post?.body || "");
 
 	const handleEdit = () => {
 		setIsEditing(true);
