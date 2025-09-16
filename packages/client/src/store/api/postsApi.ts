@@ -31,6 +31,12 @@ export interface UpdatePostRequest {
 	body?: string;
 }
 
+export interface CreateUserRequest {
+	name: string;
+	email: string;
+	username: string;
+}
+
 export interface VoteResponse {
 	upvotes: number;
 	downvotes: number;
@@ -105,6 +111,14 @@ export const postsApi = createApi({
 			query: (id) => `/users/${id}`,
 			providesTags: (_, __, id) => [{ type: "User", id }],
 		}),
+		addUser: builder.mutation<User, CreateUserRequest>({
+			query: (user) => ({
+				url: "/users",
+				method: "POST",
+				body: user,
+			}),
+			invalidatesTags: [{ type: "User", id: "LIST" }],
+		}),
 		getPostsByUserId: builder.query<Post[], string>({
 			query: (userId) => `/users/${userId}/posts`,
 			providesTags: (result, _, userId) =>
@@ -153,6 +167,7 @@ export const {
 	useResetPostsMutation,
 	useGetUsersQuery,
 	useGetUserByIdQuery,
+	useAddUserMutation,
 	useGetPostsByUserIdQuery,
 	useUpvotePostMutation,
 	useDownvotePostMutation,
