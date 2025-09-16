@@ -8,6 +8,13 @@ export interface Post {
 	userId: number;
 }
 
+export interface User {
+	id: number;
+	name: string;
+	email: string;
+	username: string;
+}
+
 export interface CreatePostRequest {
 	title: string;
 	body: string;
@@ -25,7 +32,7 @@ export const postsApi = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: "http://localhost:3001",
 	}),
-	tagTypes: ["Post"], // Add tag type for cache invalidation
+	tagTypes: ["Post", "User"], // Add tag types for cache invalidation
 	endpoints: (builder) => ({
 		getPosts: builder.query<Post[], void>({
 			query: () => "/posts",
@@ -74,6 +81,30 @@ export const postsApi = createApi({
 			}),
 			invalidatesTags: [{ type: "Post", id: "LIST" }],
 		}),
+		getUsers: builder.query<User[], void>({
+			query: () => "/users",
+			providesTags: (result) =>
+				result
+					? [
+							...result.map(({ id }) => ({ type: "User" as const, id })),
+							{ type: "User", id: "LIST" },
+						]
+					: [{ type: "User", id: "LIST" }],
+		}),
+		getUserById: builder.query<User, number>({
+			query: (id) => `/users/${id}`,
+			providesTags: (_, __, id) => [{ type: "User", id }],
+		}),
+		getPostsByUserId: builder.query<Post[], number>({
+			query: (userId) => `/users/${userId}/posts`,
+			providesTags: (result, _, userId) =>
+				result
+					? [
+							...result.map(({ id }) => ({ type: "Post" as const, id })),
+							{ type: "Post", id: `USER_${userId}` },
+						]
+					: [{ type: "Post", id: `USER_${userId}` }],
+		}),
 	}),
 });
 
@@ -84,4 +115,7 @@ export const {
 	useUpdatePostMutation,
 	useDeletePostMutation,
 	useResetPostsMutation,
+	useGetUsersQuery,
+	useGetUserByIdQuery,
+	useGetPostsByUserIdQuery,
 } = postsApi;

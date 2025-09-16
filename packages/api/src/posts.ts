@@ -68,7 +68,7 @@ const originalPosts: Post[] = [
 	},
 ];
 
-export let posts: Post[] = [...originalPosts];
+export const posts: Post[] = [...originalPosts];
 
 export const resetPosts = (): Post[] => {
 	posts.length = 0;
