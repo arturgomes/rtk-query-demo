@@ -1,54 +1,7 @@
-// src/store/api/postsApi.ts
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { CreatePostRequest, Post, UpdatePostRequest } from "./types";
+import { baseApi } from "./baseApi";
 
-export interface Post {
-	id: string;
-	title: string;
-	body: string;
-	userId: string;
-	createdAt: string;
-	upvotes?: number;
-	downvotes?: number;
-	voteScore?: number;
-}
-
-export interface User {
-	id: string;
-	name: string;
-	email: string;
-	username: string;
-}
-
-export interface CreatePostRequest {
-	title: string;
-	body: string;
-	userId: string;
-}
-
-export interface UpdatePostRequest {
-	id: string;
-	title?: string;
-	body?: string;
-}
-
-export interface CreateUserRequest {
-	name: string;
-	email: string;
-	username: string;
-}
-
-export interface VoteResponse {
-	upvotes: number;
-	downvotes: number;
-	voteScore: number;
-}
-
-export const postsApi = createApi({
-	reducerPath: "postsApi",
-	baseQuery: fetchBaseQuery({
-		baseUrl: "http://localhost:3001",
-	}),
-	tagTypes: ["Post", "User"], // Add tag types for cache invalidation
+export const postsApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
 		getPosts: builder.query<Post[], void>({
 			query: () => "/posts",
@@ -97,64 +50,6 @@ export const postsApi = createApi({
 			}),
 			invalidatesTags: [{ type: "Post", id: "LIST" }],
 		}),
-		getUsers: builder.query<User[], void>({
-			query: () => "/users",
-			providesTags: (result) =>
-				result
-					? [
-							...result.map(({ id }) => ({ type: "User" as const, id })),
-							{ type: "User", id: "LIST" },
-						]
-					: [{ type: "User", id: "LIST" }],
-		}),
-		getUserById: builder.query<User, string>({
-			query: (id) => `/users/${id}`,
-			providesTags: (_, __, id) => [{ type: "User", id }],
-		}),
-		addUser: builder.mutation<User, CreateUserRequest>({
-			query: (user) => ({
-				url: "/users",
-				method: "POST",
-				body: user,
-			}),
-			invalidatesTags: [{ type: "User", id: "LIST" }],
-		}),
-		getPostsByUserId: builder.query<Post[], string>({
-			query: (userId) => `/users/${userId}/posts`,
-			providesTags: (result, _, userId) =>
-				result
-					? [
-							...result.map(({ id }) => ({ type: "Post" as const, id })),
-							{ type: "Post", id: `USER_${userId}` },
-						]
-					: [{ type: "Post", id: `USER_${userId}` }],
-		}),
-		upvotePost: builder.mutation<VoteResponse, string>({
-			query: (postId) => ({
-				url: `/posts/${postId}/upvote`,
-				method: "POST",
-			}),
-			invalidatesTags: (_, __, postId) => [
-				{ type: "Post", id: postId },
-				{ type: "Post", id: "LIST" },
-			],
-		}),
-		downvotePost: builder.mutation<VoteResponse, string>({
-			query: (postId) => ({
-				url: `/posts/${postId}/downvote`,
-				method: "POST",
-			}),
-			invalidatesTags: (_, __, postId) => [
-				{ type: "Post", id: postId },
-				{ type: "Post", id: "LIST" },
-			],
-		}),
-		getPostVotes: builder.query<VoteResponse, string>({
-			query: (postId) => ({
-				url: `/posts/${postId}/votes`,
-			}),
-			providesTags: (_, __, postId) => [{ type: "Post", id: postId }],
-		}),
 	}),
 });
 
@@ -165,11 +60,4 @@ export const {
 	useUpdatePostMutation,
 	useDeletePostMutation,
 	useResetPostsMutation,
-	useGetUsersQuery,
-	useGetUserByIdQuery,
-	useAddUserMutation,
-	useGetPostsByUserIdQuery,
-	useUpvotePostMutation,
-	useDownvotePostMutation,
-	useGetPostVotesQuery,
 } = postsApi;
