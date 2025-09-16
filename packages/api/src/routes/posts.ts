@@ -1,15 +1,15 @@
 import { Router } from "express";
+import { ObjectId } from "bson";
 import { type Post, posts, resetPosts } from "../posts";
 
 const router = Router();
-let nextId = 11;
 
 router.get("/", (_req, res) => {
 	res.json(posts);
 });
 
 router.get("/:id", (req, res) => {
-	const id = parseInt(req.params.id);
+	const id = req.params.id;
 	const post = posts.find((p) => p.id === id);
 
 	if (!post) {
@@ -29,7 +29,7 @@ router.post("/", (req, res) => {
 	}
 
 	const newPost: Post = {
-		id: nextId++,
+		id: new ObjectId().toHexString(),
 		title,
 		body,
 		userId,
@@ -40,7 +40,7 @@ router.post("/", (req, res) => {
 });
 
 router.patch("/:id", (req, res) => {
-	const id = parseInt(req.params.id);
+	const id = req.params.id;
 	const postIndex = posts.findIndex((p) => p.id === id);
 
 	if (postIndex === -1) {
@@ -59,7 +59,7 @@ router.patch("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
-	const id = parseInt(req.params.id);
+	const id = req.params.id;
 	const postIndex = posts.findIndex((p) => p.id === id);
 
 	if (postIndex === -1) {
@@ -72,7 +72,6 @@ router.delete("/:id", (req, res) => {
 
 router.post("/reset", (_req, res) => {
 	const resetData = resetPosts();
-	nextId = 11; // Reset nextId to original value
 	res.json({ message: "Posts reset to original state", posts: resetData });
 });
 

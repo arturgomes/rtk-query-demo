@@ -9,7 +9,7 @@ router.get("/", (_req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-	const id = parseInt(req.params.id);
+	const id = req.params.id;
 	const user = users.find((u) => u.id === id);
 
 	if (!user) {
@@ -20,7 +20,7 @@ router.get("/:id", (req, res) => {
 });
 
 router.get("/:id/posts", (req, res) => {
-	const userId = parseInt(req.params.id);
+	const userId = req.params.id;
 	const user = users.find((u) => u.id === userId);
 
 	if (!user) {
