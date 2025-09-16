@@ -1,4 +1,9 @@
-export { Button, type ButtonProps } from "./Button";
+// New UI Components
+export * from "./card";
+export { Button, type ButtonProps } from "./button";
+
+// Legacy Components
+export { Button as LegacyButton, type ButtonProps as LegacyButtonProps } from "./Button";
 export {
 	CreateButton,
 	SaveButton,
