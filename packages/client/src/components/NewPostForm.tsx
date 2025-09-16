@@ -1,6 +1,7 @@
 // src/components/NewPostForm.tsx
 import { useState } from "react";
 import { useAddPostMutation } from "../store/api/postsApi";
+import { CreateButton, CancelButton } from "./ui";
 
 interface NewPostFormProps {
 	onPostAdded: () => void;
@@ -63,20 +64,14 @@ const NewPostForm = ({ onPostAdded }: NewPostFormProps) => {
 					/>
 				</div>
 				<div className="flex justify-between">
-					<button
-						type="button"
+					<CancelButton
 						onClick={onPostAdded}
-						className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
-					>
-						Cancel
-					</button>
-					<button
+					/>
+					<CreateButton
 						type="submit"
-						disabled={isLoading || !title || !body}
-						className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-blue-300"
-					>
-						{isLoading ? "Creating..." : "Create Post"}
-					</button>
+						disabled={!title || !body}
+						isCreating={isLoading}
+					/>
 				</div>
 			</form>
 		</div>
