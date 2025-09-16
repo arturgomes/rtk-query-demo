@@ -1,7 +1,11 @@
 import type { Post } from "../store/api/postsApi";
-import { PostItemButton, IconButton } from "./ui";
-import { UpvoteIcon, DownvoteIcon } from "./ui/icons";
-import { useUpvotePostMutation, useDownvotePostMutation, useGetPostVotesQuery } from "../store/api/postsApi";
+import {
+	useDownvotePostMutation,
+	useGetPostVotesQuery,
+	useUpvotePostMutation,
+} from "../store/api/postsApi";
+import { IconButton, PostItemButton } from "./ui";
+import { DownvoteIcon, UpvoteIcon } from "./ui/icons";
 
 interface PostsListItemProps {
 	post: Post;
@@ -19,8 +23,8 @@ const PostsListItem = ({
 	const [upvotePost, { isLoading: isUpvoting }] = useUpvotePostMutation();
 	const [downvotePost, { isLoading: isDownvoting }] = useDownvotePostMutation();
 
-	const upvotes = post.upvotes ?? votesData?.upvotes ?? 0;
-	const downvotes = post.downvotes ?? votesData?.downvotes ?? 0;
+	const _upvotess = post.upvotes ?? votesData?.upvotes ?? 0;
+	const _downvotess = post.downvotes ?? votesData?.downvotes ?? 0;
 	const voteScore = post.voteScore ?? votesData?.voteScore ?? 0;
 	const isLoading = isUpvoting || isDownvoting;
 
@@ -51,16 +55,16 @@ const PostsListItem = ({
 	return (
 		<li className="py-4">
 			<div className="flex justify-between group">
-				<PostItemButton
-					onClick={() => onSelectPost(post.id)}
-				>
+				<PostItemButton onClick={() => onSelectPost(post.id)}>
 					<div>
 						<h3 className="text-lg font-medium text-gray-800 mb-2">
 							{post.title}
 						</h3>
 						<div className="text-sm text-gray-500 mb-2 space-y-1">
 							<div>By: {getUserName(post.userId)}</div>
-							<div>Created: {new Date(post.createdAt).toLocaleDateString()}</div>
+							<div>
+								Created: {new Date(post.createdAt).toLocaleDateString()}
+							</div>
 						</div>
 						<p className="text-gray-600">{post.body.substring(0, 100)}...</p>
 					</div>
