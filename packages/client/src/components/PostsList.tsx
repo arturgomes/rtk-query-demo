@@ -3,7 +3,7 @@ import {
 	useGetPostsQuery,
 	useGetUsersQuery,
 	useResetPostsMutation,
-} from "../store/api/postsApi";
+} from "../store/api";
 import ErrorMessage from "./ErrorMessage";
 import LoadingSpinner from "./LoadingSpinner";
 import PostsListHeader from "./PostsListHeader";

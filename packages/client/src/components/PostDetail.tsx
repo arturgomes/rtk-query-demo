@@ -3,9 +3,9 @@ import { useState } from "react";
 import {
 	useDeletePostMutation,
 	useGetPostByIdQuery,
-	useGetUserByIdQuery,
 	useUpdatePostMutation,
 } from "../store/api/postsApi";
+import { useGetUserByIdQuery } from "../store/api/usersApi";
 import {
 	BackButton,
 	CancelButton,

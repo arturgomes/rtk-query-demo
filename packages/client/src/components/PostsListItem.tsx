@@ -1,9 +1,9 @@
-import type { Post } from "../store/api/postsApi";
+import type { Post } from "../store/api/types";
 import {
 	useDownvotePostMutation,
 	useGetPostVotesQuery,
 	useUpvotePostMutation,
-} from "../store/api/postsApi";
+} from "../store/api/votesApi";
 import {
 	Button,
 	Card,
