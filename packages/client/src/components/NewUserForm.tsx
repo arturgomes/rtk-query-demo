@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
-import { useAddUserMutation } from "../store/api/postsApi";
-import { CreateButton, CancelButton } from "./ui";
+import { useAddUserMutation } from "../store/api";
+import { CancelButton, CreateButton } from "./ui";
 
 interface NewUserFormProps {
 	onUserAdded: () => void;
@@ -40,7 +40,6 @@ const NewUserForm = ({ onUserAdded }: NewUserFormProps) => {
 
 	return (
 		<div>
-			<h2 className="text-2xl font-bold text-gray-800 mb-6">Create New User</h2>
 			<form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl">
 				<div className="mb-4">
 					<label
@@ -73,7 +72,9 @@ const NewUserForm = ({ onUserAdded }: NewUserFormProps) => {
 						className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 					/>
 					{errors.username && (
-						<p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
+						<p className="text-red-500 text-sm mt-1">
+							{errors.username.message}
+						</p>
 					)}
 				</div>
 				<div className="mb-6">
@@ -90,8 +91,8 @@ const NewUserForm = ({ onUserAdded }: NewUserFormProps) => {
 							required: "Email is required",
 							pattern: {
 								value: /^\S+@\S+$/i,
-								message: "Invalid email address"
-							}
+								message: "Invalid email address",
+							},
 						})}
 						disabled={isLoading}
 						className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -101,9 +102,7 @@ const NewUserForm = ({ onUserAdded }: NewUserFormProps) => {
 					)}
 				</div>
 				<div className="flex justify-between">
-					<CancelButton
-						onClick={onUserAdded}
-					/>
+					<CancelButton onClick={onUserAdded} />
 					<CreateButton
 						type="submit"
 						disabled={!isValid || isLoading}

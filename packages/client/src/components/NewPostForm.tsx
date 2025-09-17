@@ -1,7 +1,8 @@
 // src/components/NewPostForm.tsx
 import { useForm } from "react-hook-form";
-import { useAddPostMutation, useGetUsersQuery } from "../store/api/postsApi";
-import { CreateButton, CancelButton } from "./ui";
+import { useAddPostMutation } from "../store/api/postsApi";
+import { useGetUsersQuery } from "../store/api/usersApi";
+import { CancelButton, CreateButton } from "./ui";
 
 interface NewPostFormProps {
 	onPostAdded: () => void;
@@ -42,7 +43,6 @@ const NewPostForm = ({ onPostAdded }: NewPostFormProps) => {
 
 	return (
 		<div>
-			<h2 className="text-2xl font-bold text-gray-800 mb-6">Create New Post</h2>
 			<form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl">
 				<div className="mb-4">
 					<label
@@ -104,9 +104,7 @@ const NewPostForm = ({ onPostAdded }: NewPostFormProps) => {
 					)}
 				</div>
 				<div className="flex justify-between">
-					<CancelButton
-						onClick={onPostAdded}
-					/>
+					<CancelButton onClick={onPostAdded} />
 					<CreateButton
 						type="submit"
 						disabled={!isValid || isLoading}
