@@ -1,4 +1,4 @@
-import { useGetUsersQuery } from "../store/api/postsApi";
+import { useGetUsersQuery } from "../store/api";
 import ErrorMessage from "./ErrorMessage";
 import LoadingSpinner from "./LoadingSpinner";
 import UsersListHeader from "./UsersListHeader";
