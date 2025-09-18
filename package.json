@@ -6,13 +6,22 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"yarn workspace api dev\" \"yarn workspace client dev\"",
+    "dev": "if [ \"$NODE_ENV\" = \"production\" ]; then concurrently \"yarn workspace cloud dev\" \"yarn workspace client dev\"; else concurrently \"yarn workspace api dev\" \"yarn workspace client dev\"; fi",
+    "dev:api": "concurrently \"yarn workspace api dev\" \"yarn workspace client dev\"",
+    "dev:cloud": "concurrently \"yarn workspace cloud dev\" \"yarn workspace client dev\"",
     "dev:client": "yarn workspace client dev",
-    "dev:api": "yarn workspace api dev",
-    "build": "yarn workspace client build",
+    "api:dev": "yarn workspace api dev",
+    "cloud:dev": "yarn workspace cloud dev",
+    "build": "yarn workspace @rtk-query-demo/types build && yarn workspace client build",
+    "build:types": "yarn workspace @rtk-query-demo/types build",
+    "build:all": "yarn workspace @rtk-query-demo/types build && yarn workspace api build && yarn workspace cloud build && yarn workspace client build",
+    "build:cloud": "yarn workspace @rtk-query-demo/types build && yarn workspace cloud build && yarn workspace client build",
+    "deploy:cloud": "yarn workspace cloud deploy",
+    "seed:cloud": "yarn workspace cloud seed",
     "lint": "yarn workspaces foreach run lint",
     "lint:client": "yarn workspace client lint",
-    "lint:api": "yarn workspace api lint"
+    "lint:api": "yarn workspace api lint",
+    "lint:cloud": "yarn workspace cloud lint"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
