@@ -2,6 +2,20 @@ service: rtk-query-demo-cloud
 
 frameworkVersion: "4"
 
+
+custom:
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    stages:
+      - dev
+      - prod
+  serverless-offline:
+    httpPort: 3000
+    lambdaPort: 3002
+
 provider:
   name: aws
   runtime: nodejs20.x
@@ -11,6 +25,7 @@ provider:
     AWS_REGION: ${env:AWS_REGION, 'us-east-1'}
     DYNAMODB_POSTS_TABLE: ${env:DYNAMODB_POSTS_TABLE, '${self:service}-${self:provider.stage}-posts'}
     DYNAMODB_USERS_TABLE: ${env:DYNAMODB_USERS_TABLE, '${self:service}-${self:provider.stage}-users'}
+    IS_OFFLINE: ${env:IS_OFFLINE, 'false'}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -166,4 +181,5 @@ resources:
         BillingMode: PAY_PER_REQUEST
 
 plugins:
+  - serverless-dynamodb-local
   - serverless-offline

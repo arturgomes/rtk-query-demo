@@ -1,0 +1,351 @@
+{
+  "/Users/artur/Documents/studies/rtk-query-demo/packages/cloud/serverless.yml": {
+    "versionFramework": "4.19.1",
+    "servicePath": "/Users/artur/Documents/studies/rtk-query-demo/packages/cloud/serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "rtk-query-demo-cloud",
+      "frameworkVersion": "4",
+      "custom": {
+        "dynamodb": {
+          "start": {
+            "port": 8000,
+            "inMemory": true,
+            "migrate": true
+          },
+          "stages": [
+            "dev",
+            "prod"
+          ]
+        },
+        "serverless-offline": {
+          "httpPort": 3000,
+          "lambdaPort": 3002
+        }
+      },
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs20.x",
+        "region": "us-east-1",
+        "stage": "prod",
+        "environment": {
+          "AWS_REGION": "us-east-1",
+          "DYNAMODB_POSTS_TABLE": "rtk-query-demo-cloud-prod-posts",
+          "DYNAMODB_USERS_TABLE": "rtk-query-demo-cloud-prod-users",
+          "IS_OFFLINE": "true"
+        },
+        "iamRoleStatements": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:Query",
+              "dynamodb:Scan",
+              "dynamodb:GetItem",
+              "dynamodb:PutItem",
+              "dynamodb:UpdateItem",
+              "dynamodb:DeleteItem"
+            ],
+            "Resource": [
+              "arn:aws:dynamodb:us-east-1:*:table/rtk-query-demo-cloud-prod-posts",
+              "arn:aws:dynamodb:us-east-1:*:table/rtk-query-demo-cloud-prod-users"
+            ]
+          }
+        ],
+        "versionFunctions": true
+      },
+      "functions": {
+        "listPosts": {
+          "handler": "dist/handlers/posts/list.handler",
+          "events": [
+            {
+              "http": {
+                "path": "posts",
+                "method": "get",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-listPosts"
+        },
+        "getPost": {
+          "handler": "dist/handlers/posts/get.handler",
+          "events": [
+            {
+              "http": {
+                "path": "posts/{id}",
+                "method": "get",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-getPost"
+        },
+        "createPost": {
+          "handler": "dist/handlers/posts/create.handler",
+          "events": [
+            {
+              "http": {
+                "path": "posts",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-createPost"
+        },
+        "updatePost": {
+          "handler": "dist/handlers/posts/update.handler",
+          "events": [
+            {
+              "http": {
+                "path": "posts/{id}",
+                "method": "patch",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-updatePost"
+        },
+        "deletePost": {
+          "handler": "dist/handlers/posts/delete.handler",
+          "events": [
+            {
+              "http": {
+                "path": "posts/{id}",
+                "method": "delete",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-deletePost"
+        },
+        "resetPosts": {
+          "handler": "dist/handlers/posts/reset.handler",
+          "events": [
+            {
+              "http": {
+                "path": "posts/reset",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-resetPosts"
+        },
+        "upvotePost": {
+          "handler": "dist/handlers/posts/upvote.handler",
+          "events": [
+            {
+              "http": {
+                "path": "posts/{id}/upvote",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-upvotePost"
+        },
+        "downvotePost": {
+          "handler": "dist/handlers/posts/downvote.handler",
+          "events": [
+            {
+              "http": {
+                "path": "posts/{id}/downvote",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-downvotePost"
+        },
+        "getPostVotes": {
+          "handler": "dist/handlers/posts/votes.handler",
+          "events": [
+            {
+              "http": {
+                "path": "posts/{id}/votes",
+                "method": "get",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-getPostVotes"
+        },
+        "listUsers": {
+          "handler": "dist/handlers/users/list.handler",
+          "events": [
+            {
+              "http": {
+                "path": "users",
+                "method": "get",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-listUsers"
+        },
+        "getUser": {
+          "handler": "dist/handlers/users/get.handler",
+          "events": [
+            {
+              "http": {
+                "path": "users/{id}",
+                "method": "get",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-getUser"
+        },
+        "createUser": {
+          "handler": "dist/handlers/users/create.handler",
+          "events": [
+            {
+              "http": {
+                "path": "users",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-createUser"
+        },
+        "updateUser": {
+          "handler": "dist/handlers/users/update.handler",
+          "events": [
+            {
+              "http": {
+                "path": "users/{id}",
+                "method": "patch",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-updateUser"
+        },
+        "deleteUser": {
+          "handler": "dist/handlers/users/delete.handler",
+          "events": [
+            {
+              "http": {
+                "path": "users/{id}",
+                "method": "delete",
+                "cors": true
+              }
+            }
+          ],
+          "name": "rtk-query-demo-cloud-prod-deleteUser"
+        }
+      },
+      "resources": {
+        "Resources": {
+          "PostsTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "rtk-query-demo-cloud-prod-posts",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 5,
+                "WriteCapacityUnits": 5
+              }
+            }
+          },
+          "UsersTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "rtk-query-demo-cloud-prod-users",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
+          }
+        }
+      },
+      "plugins": [
+        "serverless-dynamodb-local",
+        "serverless-offline"
+      ]
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs20.x",
+      "region": "us-east-1",
+      "stage": "prod",
+      "environment": {
+        "AWS_REGION": "us-east-1",
+        "DYNAMODB_POSTS_TABLE": "rtk-query-demo-cloud-prod-posts",
+        "DYNAMODB_USERS_TABLE": "rtk-query-demo-cloud-prod-users",
+        "IS_OFFLINE": "true"
+      },
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:Query",
+            "dynamodb:Scan",
+            "dynamodb:GetItem",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem",
+            "dynamodb:DeleteItem"
+          ],
+          "Resource": [
+            "arn:aws:dynamodb:us-east-1:*:table/rtk-query-demo-cloud-prod-posts",
+            "arn:aws:dynamodb:us-east-1:*:table/rtk-query-demo-cloud-prod-users"
+          ]
+        }
+      ],
+      "versionFunctions": true
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "error": {
+      "message": "The Access Key ID or security token is invalid.",
+      "stack": "UnrecognizedClientException: The Access Key ID or security token is invalid.\n    at Request.extractError (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/protocol/json.js:80:27)\n    at Request.callListeners (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/sequential_executor.js:106:20)\n    at Request.emit (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/sequential_executor.js:78:10)\n    at Request.emit (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/request.js:686:14)\n    at Request.transition (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/request.js:22:10)\n    at AcceptorStateMachine.runTo (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/state_machine.js:14:12)\n    at /Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/state_machine.js:26:10\n    at Request.<anonymous> (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/request.js:38:9)\n    at Request.<anonymous> (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/request.js:688:12)\n    at Request.callListeners (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/sequential_executor.js:116:18)\n    at Request.emit (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/sequential_executor.js:78:10)\n    at Request.emit (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/request.js:686:14)\n    at Request.transition (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/request.js:22:10)\n    at AcceptorStateMachine.runTo (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/state_machine.js:14:12)\n    at /Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/state_machine.js:26:10\n    at Request.<anonymous> (/Users/artur/Documents/studies/rtk-query-demo/node_modules/aws-sdk/lib/request.js:38:9)\nFrom previous event:\n    at ServerlessDynamodbLocal.createTable (/Users/artur/Documents/studies/rtk-query-demo/node_modules/serverless-dynamodb-local/index.js:343:16)\n    at /Users/artur/Documents/studies/rtk-query-demo/node_modules/serverless-dynamodb-local/index.js:209:59\nFrom previous event:\n    at ServerlessDynamodbLocal.migrateHandler (/Users/artur/Documents/studies/rtk-query-demo/node_modules/serverless-dynamodb-local/index.js:209:30)\n    at /Users/artur/Documents/studies/rtk-query-demo/node_modules/serverless-dynamodb-local/index.js:267:49\n    at process.processImmediate (node:internal/timers:505:21)\nFrom previous event:\n    at ServerlessDynamodbLocal.startHandler (/Users/artur/Documents/studies/rtk-query-demo/node_modules/serverless-dynamodb-local/index.js:267:14)\n    at PluginManager.runHooks (file:///Users/artur/.serverless/releases/4.19.1/package/dist/sf-core.js:1303:9871)\n    at PluginManager.invoke (file:///Users/artur/.serverless/releases/4.19.1/package/dist/sf-core.js:1303:10645)\n    at async PluginManager.run (file:///Users/artur/.serverless/releases/4.19.1/package/dist/sf-core.js:1303:11364)\n    at async Serverless.run (file:///Users/artur/.serverless/releases/4.19.1/package/dist/sf-core.js:1310:10523)\n    at async runFramework (file:///Users/artur/.serverless/releases/4.19.1/package/dist/sf-core.js:1337:1777)\n    at async TraditionalRunner.run (file:///Users/artur/.serverless/releases/4.19.1/package/dist/sf-core.js:1333:28331)\n    at async route (file:///Users/artur/.serverless/releases/4.19.1/package/dist/sf-core.js:1508:2878)\n    at async Object.run (file:///Users/artur/.serverless/releases/4.19.1/package/dist/sf-core.js:1509:3661)\n    at async run2 (file:///Users/artur/.serverless/releases/4.19.1/package/dist/sf-core.js:1509:4815)",
+      "code": "UnrecognizedClientException"
+    },
+    "serviceRawFile": "service: rtk-query-demo-cloud\n\nframeworkVersion: \"4\"\n\n\ncustom:\n  dynamodb:\n    start:\n      port: 8000\n      inMemory: true\n      migrate: true\n    stages:\n      - dev\n      - prod\n  serverless-offline:\n    httpPort: 3000\n    lambdaPort: 3002\n\nprovider:\n  name: aws\n  runtime: nodejs20.x\n  region: ${env:AWS_REGION, 'us-east-1'}\n  stage: ${opt:stage, 'prod'}\n  environment:\n    AWS_REGION: ${env:AWS_REGION, 'us-east-1'}\n    DYNAMODB_POSTS_TABLE: ${env:DYNAMODB_POSTS_TABLE, '${self:service}-${self:provider.stage}-posts'}\n    DYNAMODB_USERS_TABLE: ${env:DYNAMODB_USERS_TABLE, '${self:service}-${self:provider.stage}-users'}\n    IS_OFFLINE: ${env:IS_OFFLINE, 'false'}\n  iamRoleStatements:\n    - Effect: Allow\n      Action:\n        - dynamodb:Query\n        - dynamodb:Scan\n        - dynamodb:GetItem\n        - dynamodb:PutItem\n        - dynamodb:UpdateItem\n        - dynamodb:DeleteItem\n      Resource:\n        - \"arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_POSTS_TABLE}\"\n        - \"arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_USERS_TABLE}\"\n\nfunctions:\n  # Posts endpoints\n  listPosts:\n    handler: dist/handlers/posts/list.handler\n    events:\n      - http:\n          path: posts\n          method: get\n          cors: true\n\n  getPost:\n    handler: dist/handlers/posts/get.handler\n    events:\n      - http:\n          path: posts/{id}\n          method: get\n          cors: true\n\n  createPost:\n    handler: dist/handlers/posts/create.handler\n    events:\n      - http:\n          path: posts\n          method: post\n          cors: true\n\n  updatePost:\n    handler: dist/handlers/posts/update.handler\n    events:\n      - http:\n          path: posts/{id}\n          method: patch\n          cors: true\n\n  deletePost:\n    handler: dist/handlers/posts/delete.handler\n    events:\n      - http:\n          path: posts/{id}\n          method: delete\n          cors: true\n\n  resetPosts:\n    handler: dist/handlers/posts/reset.handler\n    events:\n      - http:\n          path: posts/reset\n          method: post\n          cors: true\n\n  upvotePost:\n    handler: dist/handlers/posts/upvote.handler\n    events:\n      - http:\n          path: posts/{id}/upvote\n          method: post\n          cors: true\n\n  downvotePost:\n    handler: dist/handlers/posts/downvote.handler\n    events:\n      - http:\n          path: posts/{id}/downvote\n          method: post\n          cors: true\n\n  getPostVotes:\n    handler: dist/handlers/posts/votes.handler\n    events:\n      - http:\n          path: posts/{id}/votes\n          method: get\n          cors: true\n\n  # Users endpoints\n  listUsers:\n    handler: dist/handlers/users/list.handler\n    events:\n      - http:\n          path: users\n          method: get\n          cors: true\n\n  getUser:\n    handler: dist/handlers/users/get.handler\n    events:\n      - http:\n          path: users/{id}\n          method: get\n          cors: true\n\n  createUser:\n    handler: dist/handlers/users/create.handler\n    events:\n      - http:\n          path: users\n          method: post\n          cors: true\n\n  updateUser:\n    handler: dist/handlers/users/update.handler\n    events:\n      - http:\n          path: users/{id}\n          method: patch\n          cors: true\n\n  deleteUser:\n    handler: dist/handlers/users/delete.handler\n    events:\n      - http:\n          path: users/{id}\n          method: delete\n          cors: true\n\nresources:\n  Resources:\n    PostsTable:\n      Type: AWS::DynamoDB::Table\n      Properties:\n        TableName: ${self:provider.environment.DYNAMODB_POSTS_TABLE}\n        AttributeDefinitions:\n          - AttributeName: id\n            AttributeType: S\n        KeySchema:\n          - AttributeName: id\n            KeyType: HASH\n        BillingMode: PAY_PER_REQUEST\n\n    UsersTable:\n      Type: AWS::DynamoDB::Table\n      Properties:\n        TableName: ${self:provider.environment.DYNAMODB_USERS_TABLE}\n        AttributeDefinitions:\n          - AttributeName: id\n            AttributeType: S\n        KeySchema:\n          - AttributeName: id\n            KeyType: HASH\n        BillingMode: PAY_PER_REQUEST\n\nplugins:\n  - serverless-dynamodb-local\n  - serverless-offline",
+    "command": [
+      "dynamodb",
+      "start"
+    ],
+    "options": {},
+    "orgId": "a89d0e05-0150-457b-af96-f5c57a150122",
+    "orgName": "aog500",
+    "userId": "cpDgkxHtyY4TTT9tmr",
+    "userName": "aog500",
+    "serviceProviderAwsAccountId": "140684797471",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}

@@ -44,7 +44,7 @@ export const DeleteButton = forwardRef<HTMLButtonElement, DeleteButtonProps>(
 	({ isDeleting = false, size = "sm", ...props }, ref) => (
 		<Button
 			ref={ref}
-			variant="danger"
+			variant="destructive"
 			leftIcon={<TrashIcon className="w-4 h-4" />}
 			isLoading={isDeleting}
 			size={size}
@@ -95,7 +95,7 @@ export const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(
 	(props, ref) => (
 		<Button
 			ref={ref}
-			variant="link"
+			variant="ghost"
 			leftIcon={<ChevronLeftIcon className="w-5 h-5" />}
 			{...props}
 		>

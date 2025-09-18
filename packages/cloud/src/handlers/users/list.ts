@@ -5,6 +5,12 @@ import { User } from "../../types/users.js";
 
 export const handler: APIGatewayProxyHandler = async () => {
 	try {
+		console.log("Environment variables:", {
+			IS_OFFLINE: process.env.IS_OFFLINE,
+			DYNAMODB_USERS_TABLE: process.env.DYNAMODB_USERS_TABLE,
+			tableName: TABLES.USERS
+		});
+
 		const command = new ScanCommand({
 			TableName: TABLES.USERS,
 		});

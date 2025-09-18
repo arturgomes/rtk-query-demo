@@ -1,0 +1,27 @@
+{
+  "unknown": {
+    "versionFramework": "4.19.1",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": true,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "command": [
+      "login"
+    ],
+    "options": {},
+    "orgId": "a89d0e05-0150-457b-af96-f5c57a150122",
+    "orgName": "aog500",
+    "userId": "cpDgkxHtyY4TTT9tmr",
+    "userName": "aog500",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}

@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "if [ \"$NODE_ENV\" = \"production\" ]; then concurrently \"yarn workspace cloud dev\" \"yarn workspace client dev\"; else concurrently \"yarn workspace api dev\" \"yarn workspace client dev\"; fi",
     "dev:api": "concurrently \"yarn workspace api dev\" \"yarn workspace client dev\"",
-    "dev:cloud": "concurrently \"yarn workspace cloud dev\" \"yarn workspace client dev\"",
+    "dev:cloud": "concurrently \"yarn workspace cloud dev:full\" \"VITE_API_URL=http://localhost:3000 yarn workspace client dev\"",
     "dev:client": "yarn workspace client dev",
     "api:dev": "yarn workspace api dev",
     "cloud:dev": "yarn workspace cloud dev",
@@ -27,6 +27,7 @@
     "autoprefixer": "^10.4.21",
     "concurrently": "^8.2.2",
     "postcss": "^8.5.6",
+    "serverless-dynamodb-local": "^0.2.40",
     "tailwindcss": "^4.1.13"
   },
   "dependencies": {
