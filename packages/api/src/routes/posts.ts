@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ObjectId } from "bson";
-import { type Post, posts, resetPosts, upvotePost, downvotePost, getVoteData } from "../posts";
+import { posts, resetPosts, upvotePost, downvotePost, getVoteData } from "../posts";
+import type { Post } from "@rtk-query-demo/types";
 
 const router = Router();
 

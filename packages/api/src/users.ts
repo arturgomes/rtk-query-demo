@@ -1,11 +1,5 @@
 import { ObjectId } from 'bson';
-
-export interface User {
-	id: string;
-	name: string;
-	email: string;
-	username: string;
-}
+import type { User } from '@rtk-query-demo/types';
 
 const originalUsers: User[] = [
 	{

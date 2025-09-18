@@ -1,15 +1,5 @@
 import { ObjectId } from 'bson';
-
-export interface Post {
-	id: string;
-	title: string;
-	body: string;
-	userId: string;
-	createdAt: string;
-	upvotes?: number;
-	downvotes?: number;
-	voteScore?: number;
-}
+import type { Post } from '@rtk-query-demo/types';
 
 const originalPosts: Post[] = [
 	{
