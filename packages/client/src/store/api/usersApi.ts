@@ -1,4 +1,5 @@
-import type { CreateUserRequest, Post, User } from "./types";
+import type { CreateUserRequest, Post, User } from "@rtk-query-demo/types";
+
 import { baseApi } from "./baseApi";
 
 export const usersApi = baseApi.injectEndpoints({

@@ -12,6 +12,7 @@
   "dependencies": {
     "@ark-ui/react": "^5.25.0",
     "@reduxjs/toolkit": "^2.9.0",
+    "@rtk-query-demo/types": "*",
     "@types/react-router-dom": "^5.3.3",
     "clsx": "^2.1.1",
     "react": "^19.1.1",

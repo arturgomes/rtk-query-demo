@@ -1,18 +1,23 @@
 // New UI Components
-export * from "./card";
-export { Button, type ButtonProps } from "./button";
 
 // Legacy Components
-export { Button as LegacyButton, type ButtonProps as LegacyButtonProps } from "./Button";
 export {
-	CreateButton,
-	SaveButton,
-	DeleteButton,
-	ResetButton,
-	CancelButton,
+	Button as LegacyButton,
+	type ButtonProps as LegacyButtonProps,
+} from "./Button";
+export {
 	BackButton,
+	CancelButton,
+	CreateButton,
+	DeleteButton,
 	EditButton,
+	IconButton,
 	PostItemButton,
-	IconButton
+	ResetButton,
+	SaveButton,
 } from "./ButtonComponents";
+export { Button, Button, type ButtonProps, type ButtonProps } from "./button";
+export * from "./card";
+export * from "./card";
+export * from "./icons";
 export * from "./icons";

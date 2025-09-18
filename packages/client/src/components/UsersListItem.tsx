@@ -1,4 +1,4 @@
-import type { User } from "../store/api/postsApi";
+import type { User } from "../store/api/types";
 import {
 	Card,
 	CardContent,

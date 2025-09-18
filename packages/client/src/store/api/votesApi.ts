@@ -1,4 +1,4 @@
-import type { VoteResponse } from "./types";
+import type { VoteResponse } from "@rtk-query-demo/types";
 import { baseApi } from "./baseApi";
 
 export const votesApi = baseApi.injectEndpoints({

@@ -1,4 +1,9 @@
-import type { CreatePostRequest, Post, UpdatePostRequest } from "./types";
+import type {
+	CreatePostRequest,
+	Post,
+	UpdatePostRequest,
+} from "@rtk-query-demo/types";
+
 import { baseApi } from "./baseApi";
 
 export const postsApi = baseApi.injectEndpoints({

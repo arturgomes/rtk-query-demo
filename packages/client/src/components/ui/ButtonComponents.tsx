@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { Button, type ButtonProps } from "./Button";
-import { PlusIcon, TrashIcon, RefreshIcon, ChevronLeftIcon } from "./icons";
+import { ChevronLeftIcon, PlusIcon, RefreshIcon, TrashIcon } from "./icons";
 
 interface CreateButtonProps extends Omit<ButtonProps, "children" | "leftIcon"> {
 	isCreating?: boolean;
@@ -17,7 +17,7 @@ export const CreateButton = forwardRef<HTMLButtonElement, CreateButtonProps>(
 		>
 			{isCreating ? "Creating..." : "Create Post"}
 		</Button>
-	)
+	),
 );
 
 CreateButton.displayName = "CreateButton";
@@ -28,15 +28,10 @@ interface SaveButtonProps extends Omit<ButtonProps, "children"> {
 
 export const SaveButton = forwardRef<HTMLButtonElement, SaveButtonProps>(
 	({ isSaving = false, ...props }, ref) => (
-		<Button
-			ref={ref}
-			variant="primary"
-			isLoading={isSaving}
-			{...props}
-		>
+		<Button ref={ref} variant="primary" isLoading={isSaving} {...props}>
 			{isSaving ? "Saving..." : "Save Changes"}
 		</Button>
-	)
+	),
 );
 
 SaveButton.displayName = "SaveButton";
@@ -57,7 +52,7 @@ export const DeleteButton = forwardRef<HTMLButtonElement, DeleteButtonProps>(
 		>
 			{isDeleting ? "Deleting..." : "Delete"}
 		</Button>
-	)
+	),
 );
 
 DeleteButton.displayName = "DeleteButton";
@@ -77,7 +72,7 @@ export const ResetButton = forwardRef<HTMLButtonElement, ResetButtonProps>(
 		>
 			{isResetting ? "Resetting..." : "Reset"}
 		</Button>
-	)
+	),
 );
 
 ResetButton.displayName = "ResetButton";
@@ -86,14 +81,10 @@ interface CancelButtonProps extends Omit<ButtonProps, "children"> {}
 
 export const CancelButton = forwardRef<HTMLButtonElement, CancelButtonProps>(
 	(props, ref) => (
-		<Button
-			ref={ref}
-			variant="secondary"
-			{...props}
-		>
+		<Button ref={ref} variant="secondary" {...props}>
 			Cancel
 		</Button>
-	)
+	),
 );
 
 CancelButton.displayName = "CancelButton";
@@ -110,7 +101,7 @@ export const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(
 		>
 			Back to posts
 		</Button>
-	)
+	),
 );
 
 BackButton.displayName = "BackButton";
@@ -119,36 +110,35 @@ interface EditButtonProps extends Omit<ButtonProps, "children"> {}
 
 export const EditButton = forwardRef<HTMLButtonElement, EditButtonProps>(
 	(props, ref) => (
-		<Button
-			ref={ref}
-			variant="primary"
-			{...props}
-		>
+		<Button ref={ref} variant="primary" {...props}>
 			Edit
 		</Button>
-	)
+	),
 );
 
 EditButton.displayName = "EditButton";
 
-interface PostItemButtonProps extends Omit<ButtonProps, "variant" | "className"> {}
+interface PostItemButtonProps
+	extends Omit<ButtonProps, "variant" | "className"> {}
 
-export const PostItemButton = forwardRef<HTMLButtonElement, PostItemButtonProps>(
-	({ children, ...props }, ref) => (
-		<Button
-			ref={ref}
-			variant="ghost"
-			className="flex-1 cursor-pointer group-hover:bg-gray-50 p-3 rounded-lg transition text-left w-full justify-start"
-			{...props}
-		>
-			{children}
-		</Button>
-	)
-);
+export const PostItemButton = forwardRef<
+	HTMLButtonElement,
+	PostItemButtonProps
+>(({ children, ...props }, ref) => (
+	<Button
+		ref={ref}
+		variant="ghost"
+		className="flex-1 cursor-pointer group-hover:bg-gray-50 p-3 rounded-lg transition text-left w-full justify-start"
+		{...props}
+	>
+		{children}
+	</Button>
+));
 
 PostItemButton.displayName = "PostItemButton";
 
-interface IconButtonProps extends Omit<ButtonProps, "children" | "variant" | "size"> {
+interface IconButtonProps
+	extends Omit<ButtonProps, "children" | "variant" | "size"> {
 	icon: React.ReactNode;
 	"aria-label": string;
 }
@@ -164,7 +154,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
 		>
 			{icon}
 		</Button>
-	)
+	),
 );
 
 IconButton.displayName = "IconButton";
