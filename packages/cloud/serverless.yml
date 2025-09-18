@@ -1,0 +1,169 @@
+service: rtk-query-demo-cloud
+
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ${env:AWS_REGION, 'us-east-1'}
+  stage: ${opt:stage, 'prod'}
+  environment:
+    AWS_REGION: ${env:AWS_REGION, 'us-east-1'}
+    DYNAMODB_POSTS_TABLE: ${env:DYNAMODB_POSTS_TABLE, '${self:service}-${self:provider.stage}-posts'}
+    DYNAMODB_USERS_TABLE: ${env:DYNAMODB_USERS_TABLE, '${self:service}-${self:provider.stage}-users'}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_POSTS_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_USERS_TABLE}"
+
+functions:
+  # Posts endpoints
+  listPosts:
+    handler: dist/handlers/posts/list.handler
+    events:
+      - http:
+          path: posts
+          method: get
+          cors: true
+
+  getPost:
+    handler: dist/handlers/posts/get.handler
+    events:
+      - http:
+          path: posts/{id}
+          method: get
+          cors: true
+
+  createPost:
+    handler: dist/handlers/posts/create.handler
+    events:
+      - http:
+          path: posts
+          method: post
+          cors: true
+
+  updatePost:
+    handler: dist/handlers/posts/update.handler
+    events:
+      - http:
+          path: posts/{id}
+          method: patch
+          cors: true
+
+  deletePost:
+    handler: dist/handlers/posts/delete.handler
+    events:
+      - http:
+          path: posts/{id}
+          method: delete
+          cors: true
+
+  resetPosts:
+    handler: dist/handlers/posts/reset.handler
+    events:
+      - http:
+          path: posts/reset
+          method: post
+          cors: true
+
+  upvotePost:
+    handler: dist/handlers/posts/upvote.handler
+    events:
+      - http:
+          path: posts/{id}/upvote
+          method: post
+          cors: true
+
+  downvotePost:
+    handler: dist/handlers/posts/downvote.handler
+    events:
+      - http:
+          path: posts/{id}/downvote
+          method: post
+          cors: true
+
+  getPostVotes:
+    handler: dist/handlers/posts/votes.handler
+    events:
+      - http:
+          path: posts/{id}/votes
+          method: get
+          cors: true
+
+  # Users endpoints
+  listUsers:
+    handler: dist/handlers/users/list.handler
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+
+  getUser:
+    handler: dist/handlers/users/get.handler
+    events:
+      - http:
+          path: users/{id}
+          method: get
+          cors: true
+
+  createUser:
+    handler: dist/handlers/users/create.handler
+    events:
+      - http:
+          path: users
+          method: post
+          cors: true
+
+  updateUser:
+    handler: dist/handlers/users/update.handler
+    events:
+      - http:
+          path: users/{id}
+          method: patch
+          cors: true
+
+  deleteUser:
+    handler: dist/handlers/users/delete.handler
+    events:
+      - http:
+          path: users/{id}
+          method: delete
+          cors: true
+
+resources:
+  Resources:
+    PostsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_POSTS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+plugins:
+  - serverless-offline
